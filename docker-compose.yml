@@ -1,20 +1,24 @@
-version: '3.8'
+version: '3.12'
 
 services:
   db:
     image: postgres
+    restart: always
+    env_file: .env
     environment:
-      POSTGRES_DB: tododb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis
+    restart: always
 
   web:
     build: .
+    restart: always
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
@@ -26,9 +30,12 @@ services:
 
   bot:
     build: .
+    restart: always
     command: python bot/bot.py
     depends_on:
       - web
+      - db
+      - redis
 
 volumes:
   postgres_data:
