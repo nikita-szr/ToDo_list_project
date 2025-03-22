@@ -85,7 +85,7 @@ WSGI_APPLICATION = "todo_project.wsgi.application"
 
 DATABASES = {
     "default": {
-        'ENGINE': os.getenv('SECRET_KEY'),
+        'ENGINE': os.getenv('ENGINE'),
         'NAME': os.getenv('NAME'),
         'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
