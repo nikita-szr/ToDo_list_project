@@ -25,7 +25,7 @@ cd todo-list-project
 
 Создайте .env файл и укажите переменные окружения:
 
-.env.sample
+из .env.sample
 
 3. Запуск через Docker
 
