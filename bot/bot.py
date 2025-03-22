@@ -1,29 +1,27 @@
 import os
 import requests
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
-
+from aiogram.types import Message
+import asyncio
 
 API_TOKEN = 'YOUR_BOT_TOKEN'
 DJANGO_API_URL = 'http://web:8000/api/tasks/'
 DJANGO_API_TOKEN = os.getenv("DJANGO_API_TOKEN")
 
 bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
 HEADERS = {
     "Authorization": f"Token {DJANGO_API_TOKEN}",
     "Content-Type": "application/json"
 }
 
-
-@dp.message_handler(commands=['start'])
-async def start(message: types.Message):
+@dp.message(commands=['start'])
+async def start(message: Message):
     await message.answer("Привет! Я бот для управления задачами. Используй /tasks для просмотра задач.")
 
-
-@dp.message_handler(commands=['tasks'])
-async def list_tasks(message: types.Message):
+@dp.message(commands=['tasks'])
+async def list_tasks(message: Message):
     response = requests.get(DJANGO_API_URL, headers=HEADERS)
 
     if response.status_code == 200:
@@ -34,5 +32,9 @@ async def list_tasks(message: types.Message):
         await message.answer("Ошибка при получении задач.")
 
 
+async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
+    asyncio.run(main())
