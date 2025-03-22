@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "tasks",
     "rest_framework",
     "corsheaders",
+    "bot",
 
 ]
 
